@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проверка доступа</title>
+</head>
+<body>
+    <h1>Проверка доступа</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Загрузить изображение</button>
+    </form>
+
+    {% if license_plate %}
+        <h2>Результат:</h2>
+        <p>Гос. номер: {{ license_plate }}</p>
+        <img src="{{ image_url }}" alt="Загруженное изображение" width="400">
+    {% endif %}
+
+    <h2>Последние события:</h2>
+    <ul>
+        {% for event in events %}
+            <li>
+                <strong>Время:</strong> {{ event.timestamp }}<br>
+                <strong>Гос. номер:</strong> {{ event.license_plate }}<br>
+                <strong>Допущен:</strong> {% if event.allowed %}Да{% else %}Нет{% endif %}<br>
+                <img src="{{ event.image.url }}" alt="Фото автомобиля" width="200">
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
